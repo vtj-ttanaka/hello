@@ -1,16 +1,15 @@
----
-name: Build and publish a Docker image
+name: build and push container
 
 on:
   push:
     branches:
       - main
     paths:
-      - app/*
-      - .github/workflows/actions.yml
+      - 'app/*'
+      - .github/workflows/actions.yaml
 
 jobs:
-  build-and-push:
+  build-container:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -27,15 +26,16 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}      
-     - id: metadata
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - id: metadata
         run: |
           echo "image=$(echo ${{ github.repository }} | tr '[A-Z]' '[a-z]')" >> "$GITHUB_OUTPUT"
           echo "tag=$(git rev-parse --short $GITHUB_SHA)" >> "$GITHUB_OUTPUT"
       - name: Build and push
         uses: docker/build-push-action@v4
         with:
-          context: app
+          context: .
+          platforms: linux/amd64
           push: true
           cache-from: type=gha
           cache-to: type=gha,mode=max
