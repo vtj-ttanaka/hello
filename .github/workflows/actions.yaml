@@ -40,4 +40,5 @@ jobs:
           cache-to: type=gha,mode=max
           tags: |
             ghcr.io/${{ steps.metadata.outputs.image }}:latest
+            ghcr.io/${{ steps.metadata.outputs.image }}:red
             ghcr.io/${{ steps.metadata.outputs.image }}:${{ steps.metadata.outputs.tag }}
